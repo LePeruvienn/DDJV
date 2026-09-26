@@ -12,30 +12,42 @@ public class TargetSpawner : MonoBehaviour
 	[SerializeField]
 	private float minSpawnTime = 1f;
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-	{
-		
-	}
+	[SerializeField]
+	private float spawnRadius = 5f;
+
+	private bool _canSpawnEntity = true;
 
 	// Update is called once per frame
 	void Update()
 	{
-		
-
+		if(_canSpawnEntity)
+		{
+			SpawnEntity();
+		}
 	}
 
-	IEnumerator DeathCoroutine()
+	void SpawnEntity()
 	{
-		while(true)
-		{
-			float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
-			yield return new WaitForSeconds(waitTime);
+		float x = Random.Range(-spawnRadius, spawnRadius);
+		float z = Random.Range(-spawnRadius, spawnRadius);
 
-			float x = Random.Range(-10f, 10f);
-			float y = Random.Range(-10f, 10f);
+		Vector3 spawnPosition = new Vector3(x, 0f, z);
 
-			GameObject target = Instantiate(originalTarget);
-		}
+		GameObject target = Instantiate(originalTarget, spawnPosition, Quaternion.identity);
+
+		target.SetActive(true);
+
+		_canSpawnEntity = false;
+
+		StartCoroutine(SpawnCooldown());
+	}
+
+	IEnumerator SpawnCooldown()
+	{
+		float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
+
+		yield return new WaitForSeconds(waitTime);
+
+		_canSpawnEntity = true;
 	}
 }

@@ -17,7 +17,7 @@ public class Target : MonoBehaviour
 
 	private bool _isDead = false;
 
-	private Coroutine _spawnCoroutine;
+	private Coroutine _spawnCoroutine = null;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -44,7 +44,10 @@ public class Target : MonoBehaviour
 
 	IEnumerator DeathCoroutine()
 	{
-		StopCoroutine(_spawnCoroutine);
+		if (_spawnCoroutine != null)
+		{
+			StopCoroutine(_spawnCoroutine);
+		}
 
 		float timeElapsed = deathDuration;
 
@@ -56,6 +59,8 @@ public class Target : MonoBehaviour
 
 			yield return null;
 		}
+		
+		Destroy(gameObject);
 	}
 
 	IEnumerator SpawnCoroutine()
@@ -66,7 +71,9 @@ public class Target : MonoBehaviour
 		{
 			timeElapsed -= Time.deltaTime;
 
-			gameObject.transform.localScale *= 1 - (timeElapsed / deathDuration);
+			float scale = 1 - (timeElapsed / spawnDuration);
+
+			gameObject.transform.localScale = new Vector3(scale , scale, scale);
 
 			yield return null;
 		}
