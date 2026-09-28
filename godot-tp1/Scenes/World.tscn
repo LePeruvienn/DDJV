@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://o0t10inpse5u"]
+
+[ext_resource type="Script" uid="uid://coulondnxanvu" path="res://Scenes/cube.gd" id="1_5cjrv"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rsrsk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o3h3i"]
+albedo_color = Color(0.82531315, 0.2303369, 0.38993138, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_o3h3i"]
+material = SubResource("StandardMaterial3D_o3h3i")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o3h3i"]
+
+[sub_resource type="Sky" id="Sky_5cjrv"]
+sky_material = SubResource("ProceduralSkyMaterial_o3h3i")
+
+[sub_resource type="Environment" id="Environment_o3h3i"]
+background_mode = 2
+sky = SubResource("Sky_5cjrv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5cjrv"]
+albedo_color = Color(0.99607843, 0.9607843, 0.13725491, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5cjrv"]
+material = SubResource("StandardMaterial3D_5cjrv")
+
+[node name="World" type="Node3D" unique_id=462139374]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1897475722]
+transform = Transform3D(0.9983327, 0, -0.05772228, 0.024305455, 0.90702546, 0.4203737, 0.05235558, -0.42107576, 0.90551317, 0.05138731, 3.6061578, 6.1937385)
+
+[node name="Plane" type="MeshInstance3D" parent="." unique_id=305702849]
+transform = Transform3D(5, 0, 0, 0, 0.5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_rsrsk")
+
+[node name="Cube" type="MeshInstance3D" parent="." unique_id=2078245158 node_paths=PackedStringArray("targets")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_o3h3i")
+script = ExtResource("1_5cjrv")
+targets = [NodePath("../Target"), NodePath("../Target2"), NodePath("../Target3")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=848900104]
+environment = SubResource("Environment_o3h3i")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2103811240]
+transform = Transform3D(-3.090862e-08, 0.7071068, -0.7071068, 3.090862e-08, 0.7071068, 0.7071068, 1, 0, -4.371139e-08, -5.9055414, 5.3183475, 0)
+light_color = Color(0.22834244, 0.22330245, 0.24493375, 1)
+
+[node name="Target" type="MeshInstance3D" parent="." unique_id=934904197]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.853, 0.25, 0)
+mesh = SubResource("SphereMesh_5cjrv")
+
+[node name="Target2" type="MeshInstance3D" parent="." unique_id=621986542]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.6945982, 0.25, 3.011)
+mesh = SubResource("SphereMesh_5cjrv")
+
+[node name="Target3" type="MeshInstance3D" parent="." unique_id=890672366]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.4171672, 0.25, -2.3165016)
+mesh = SubResource("SphereMesh_5cjrv")
