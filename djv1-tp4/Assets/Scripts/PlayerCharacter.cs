@@ -3,44 +3,66 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerCharacter : MonoBehaviour
 {
-    [SerializeField] private float speed = 4f;
-    [SerializeField] private float angularSpeed = 360f;
+	[Header("Movement")]
+	[SerializeField] private float speed = 4f;
+	[SerializeField] private float angularSpeed = 360f;
 
-    private Camera _mainCamera;
-    private CharacterController _characterController;
+	[Header("Bullet")]
+	[SerializeField] private GameObject bulletPrefab;
+	[SerializeField] private float bulletHeight = 1f;
 
-    protected void Awake()
-    {
-        _mainCamera = Camera.main;
-        _characterController = GetComponent<CharacterController>();
-    }
+	private Camera _mainCamera;
+	private CharacterController _characterController;
 
-    protected void Update()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+	protected void Awake()
+	{
+		_mainCamera = Camera.main;
+		_characterController = GetComponent<CharacterController>();
+	}
 
-            var plane = new Plane(Vector3.up, Vector3.zero);
-            if (plane.Raycast(ray, out var x))
-            {
-                var targetPosition = ray.GetPoint(x);
-                var position = transform.position;
+	protected void Update()
+	{
+		HandleMovement();
+		HandleAttack();
+	}
 
-                var directionToTarget = targetPosition - position;
-                directionToTarget.y = 0;
+	private void HandleMovement()
+	{
+		if (Input.GetMouseButton(0))
+		{
+			var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 
-                var dot = Vector3.Dot(transform.forward, directionToTarget.normalized);
-                var speedPenalty = (dot + 1f) / 2f;
+			var plane = new Plane(Vector3.up, Vector3.zero);
+			if (plane.Raycast(ray, out var x))
+			{
+				var targetPosition = ray.GetPoint(x);
+				var position = transform.position;
 
-                var newPosition = Vector3.MoveTowards(position, targetPosition, speedPenalty * speed * Time.deltaTime);
-                _characterController.Move(newPosition - position);
+				var directionToTarget = targetPosition - position;
+				directionToTarget.y = 0;
 
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    Quaternion.LookRotation(directionToTarget),
-                    angularSpeed * Time.deltaTime);
-            }
-        }
-    }
+				var dot = Vector3.Dot(transform.forward, directionToTarget.normalized);
+				var speedPenalty = (dot + 1f) / 2f;
+
+				var newPosition = Vector3.MoveTowards(position, targetPosition, speedPenalty * speed * Time.deltaTime);
+				_characterController.Move(newPosition - position);
+
+				transform.rotation = Quaternion.RotateTowards(
+					transform.rotation,
+					Quaternion.LookRotation(directionToTarget),
+					angularSpeed * Time.deltaTime);
+			}
+		}
+	}
+
+	private void HandleAttack()
+	{
+		if (Input.GetMouseButtonDown(1))
+		{
+			Vector3 spawnPosition = transform.position + new Vector3(0, bulletHeight, 0);
+			Quaternion spawnRotation = transform.rotation;
+
+			Instantiate(bulletPrefab, spawnPosition, spawnRotation);
+		}
+	}
 }
