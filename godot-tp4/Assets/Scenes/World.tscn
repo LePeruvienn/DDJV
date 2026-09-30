@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://kyde70s3hsm3"]
+
+[ext_resource type="Script" uid="uid://cc04fqfplqql0" path="res://Assets/Scripts/orbital_camera.gd" id="1_pqu7k"]
+[ext_resource type="PackedScene" uid="uid://bheurcsibnao0" path="res://Assets/Scenes/player.tscn" id="2_pqu7k"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1gl8r"]
+
+[sub_resource type="Sky" id="Sky_1gl8r"]
+sky_material = SubResource("ProceduralSkyMaterial_1gl8r")
+
+[sub_resource type="Environment" id="Environment_1gl8r"]
+background_mode = 2
+sky = SubResource("Sky_1gl8r")
+
+[sub_resource type="BoxMesh" id="BoxMesh_pqu7k"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_pqu7k"]
+margin = 0.0
+
+[node name="World" type="Node3D" unique_id=2119098167]
+
+[node name="CameraTarget" type="Node3D" parent="." unique_id=495083145]
+script = ExtResource("1_pqu7k")
+
+[node name="Camera3D" type="Camera3D" parent="CameraTarget" unique_id=1348267427]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.535)
+
+[node name="WolrdEnvironement" type="WorldEnvironment" parent="." unique_id=1174141109]
+environment = SubResource("Environment_1gl8r")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=785497485]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 8.897252, 6.554219)
+
+[node name="Player" parent="." unique_id=960908463 instance=ExtResource("2_pqu7k")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=905698692]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=123678294]
+transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, -0.05, 0)
+mesh = SubResource("BoxMesh_pqu7k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=745687904]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1116066)
+shape = SubResource("WorldBoundaryShape3D_pqu7k")

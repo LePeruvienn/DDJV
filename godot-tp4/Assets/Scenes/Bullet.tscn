@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bsk5qr24bpa8c"]
+
+[ext_resource type="Script" uid="uid://c2jqnrkvy2kjc" path="res://Assets/Scenes/bullet.gd" id="1_eqnv0"]
+[ext_resource type="PackedScene" uid="uid://dnbj6m3uis0wi" path="res://Assets/Characters/Shell.tscn" id="1_ggn43"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5gxoi"]
+size = Vector3(0.3088379, 0.29382324, 0.5168457)
+
+[node name="Node3D" type="Node3D" unique_id=622822410]
+script = ExtResource("1_eqnv0")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1337170256]
+
+[node name="Shell" parent="RigidBody3D" unique_id=987781915 instance=ExtResource("1_ggn43")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1205068226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0045166016, -0.012145996, 0.16906738)
+shape = SubResource("BoxShape3D_5gxoi")

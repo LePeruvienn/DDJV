@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dnbj6m3uis0wi"]
+
+[ext_resource type="PackedScene" uid="uid://12g4p0j0u7qw" path="res://Assets/Models/Shell.fbx" id="1_w0a67"]
+[ext_resource type="Material" uid="uid://bfo3dp6qt0e3m" path="res://Assets/Materials/Gold.tres" id="2_knnw2"]
+
+[node name="Shell" unique_id=987781915 instance=ExtResource("1_w0a67")]
+
+[node name="Shell" parent="." index="0" unique_id=1023316075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+surface_material_override/0 = ExtResource("2_knnw2")
