@@ -1,15 +1,15 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerCharacter : MonoBehaviour
+public class PlayerCharacter : Entity
 {
-	[Header("Movement")]
-	[SerializeField] private float speed = 4f;
-	[SerializeField] private float angularSpeed = 360f;
+	enum ControllerConfig
+	{
+		Old,
+		New
+	}
 
-	[Header("Bullet")]
-	[SerializeField] private GameObject bulletPrefab;
-	[SerializeField] private float bulletHeight = 1f;
+	[SerializeField] private ControllerConfig controllerConfig = ControllerConfig.Old; 
 
 	private Camera _mainCamera;
 	private CharacterController _characterController;
@@ -22,11 +22,58 @@ public class PlayerCharacter : MonoBehaviour
 
 	protected void Update()
 	{
-		HandleMovement();
-		HandleAttack();
+		switch (controllerConfig)
+		{
+			case ControllerConfig.Old:
+				OldHandleMovement();
+				OldHandleAttack();
+				break;
+
+			case ControllerConfig.New:
+				HandleRotation();
+				HandleMovement();
+				HandleAttack();
+				break;
+		}
+	}
+
+	private void HandleRotation()
+	{
+		var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+
+		var plane = new Plane(Vector3.up, Vector3.zero);
+		if (plane.Raycast(ray, out var x))
+		{
+			var targetPosition = ray.GetPoint(x);
+			var position = transform.position;
+
+			var directionToTarget = targetPosition - position;
+			directionToTarget.y = 0;
+
+			transform.rotation = Quaternion.RotateTowards(
+				transform.rotation,
+				Quaternion.LookRotation(directionToTarget),
+				angularSpeed * Time.deltaTime);
+		}
 	}
 
 	private void HandleMovement()
+	{
+		Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+		Vector3 motion = new Vector3(input.x, 0f, input.y) * speed * Time.deltaTime;
+
+		_characterController.Move(motion);
+	}
+
+	private void HandleAttack()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			ShootBullet();
+		}
+	}
+
+	private void OldHandleMovement()
 	{
 		if (Input.GetMouseButton(0))
 		{
@@ -55,14 +102,11 @@ public class PlayerCharacter : MonoBehaviour
 		}
 	}
 
-	private void HandleAttack()
+	private void OldHandleAttack()
 	{
 		if (Input.GetMouseButtonDown(1))
 		{
-			Vector3 spawnPosition = transform.position + new Vector3(0, bulletHeight, 0);
-			Quaternion spawnRotation = transform.rotation;
-
-			Instantiate(bulletPrefab, spawnPosition, spawnRotation);
+			ShootBullet();
 		}
 	}
 }
