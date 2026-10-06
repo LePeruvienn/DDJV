@@ -63,5 +63,5 @@ func handle_attack() -> void:
 		return
 	var bullet: Node3D = bullet_scene.instantiate()
 	get_tree().root.add_child(bullet)
-	bullet.position = position
-	bullet.rotation = rotation
+	bullet.position = position + $BulletOrigin.position
+	bullet.rotation = rotation + $BulletOrigin.rotation

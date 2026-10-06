@@ -2,15 +2,24 @@
 
 [ext_resource type="Script" uid="uid://cc04fqfplqql0" path="res://Assets/Scripts/orbital_camera.gd" id="1_pqu7k"]
 [ext_resource type="PackedScene" uid="uid://bheurcsibnao0" path="res://Assets/Scenes/player.tscn" id="2_pqu7k"]
+[ext_resource type="Material" uid="uid://ddmgojmre7sl8" path="res://Assets/Materials/Wall.tres" id="3_15aau"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1gl8r"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_15aau"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 
-[sub_resource type="Sky" id="Sky_1gl8r"]
-sky_material = SubResource("ProceduralSkyMaterial_1gl8r")
+[sub_resource type="Sky" id="Sky_q4606"]
+sky_material = SubResource("ProceduralSkyMaterial_15aau")
 
-[sub_resource type="Environment" id="Environment_1gl8r"]
+[sub_resource type="Environment" id="Environment_5ta3y"]
 background_mode = 2
-sky = SubResource("Sky_1gl8r")
+sky = SubResource("Sky_q4606")
+
+[sub_resource type="BoxMesh" id="BoxMesh_15aau"]
+size = Vector3(1, 1.8916016, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pqu7k"]
+size = Vector3(1, 1.8916016, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_pqu7k"]
 
@@ -19,26 +28,40 @@ margin = 0.0
 
 [node name="World" type="Node3D" unique_id=2119098167]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1249085652]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1965614313]
+environment = SubResource("Environment_5ta3y")
+
 [node name="CameraTarget" type="Node3D" parent="." unique_id=495083145]
 script = ExtResource("1_pqu7k")
 
 [node name="Camera3D" type="Camera3D" parent="CameraTarget" unique_id=1348267427]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.535)
 
-[node name="WolrdEnvironement" type="WorldEnvironment" parent="." unique_id=1174141109]
-environment = SubResource("Environment_1gl8r")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=785497485]
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 8.897252, 6.554219)
-
 [node name="Player" parent="." unique_id=960908463 instance=ExtResource("2_pqu7k")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=905698692]
+[node name="Wall" type="StaticBody3D" parent="." unique_id=905698692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03117001, 0.7703948, 1.9521091)
+disable_mode = 1
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=123678294]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall" unique_id=1027663328]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 0.1, 0, 0, 0)
+mesh = SubResource("BoxMesh_15aau")
+surface_material_override/0 = ExtResource("3_15aau")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall" unique_id=1005779382]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 0.1, 0, 0, 0)
+shape = SubResource("BoxShape3D_pqu7k")
+
+[node name="Plane" type="StaticBody3D" parent="." unique_id=2137568835]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Plane" unique_id=123678294]
 transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, -0.05, 0)
 mesh = SubResource("BoxMesh_pqu7k")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=745687904]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plane" unique_id=745687904]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1116066)
 shape = SubResource("WorldBoundaryShape3D_pqu7k")

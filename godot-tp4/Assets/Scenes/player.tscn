@@ -9,6 +9,7 @@
 [node name="Player" type="Node3D" unique_id=960908463]
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=264216490]
+collision_layer = 2
 script = ExtResource("1_7dd06")
 bullet_scene = ExtResource("2_38rej")
 
@@ -17,3 +18,6 @@ bullet_scene = ExtResource("2_38rej")
 [node name="Collider" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1675279780]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_torqp")
+
+[node name="BulletOrigin" type="Marker3D" parent="CharacterBody3D" unique_id=1094256376]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49264377, 0.7112831)

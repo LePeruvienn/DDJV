@@ -10,9 +10,12 @@ size = Vector3(0.3088379, 0.29382324, 0.5168457)
 script = ExtResource("1_eqnv0")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1337170256]
+collision_layer = 16
 
 [node name="Shell" parent="RigidBody3D" unique_id=987781915 instance=ExtResource("1_ggn43")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1205068226]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0045166016, -0.012145996, 0.16906738)
 shape = SubResource("BoxShape3D_5gxoi")
+
+[connection signal="body_entered" from="RigidBody3D" to="." method="_on_rigid_body_3d_body_entered"]
