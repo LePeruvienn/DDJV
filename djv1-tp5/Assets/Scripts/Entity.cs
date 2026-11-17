@@ -56,7 +56,6 @@ public class Entity : MonoBehaviour
 	{
 		 Instantiate(characterExplosion, transform.position, Quaternion.identity);
 
-		 // Disable object
-		 gameObject.SetActive(false);
+		 _isDead = true;
 	}
 }

@@ -13,15 +13,30 @@ public class PlayerCharacter : Entity
 
 	private Camera _mainCamera;
 	private CharacterController _characterController;
+	private Animator _animator;
+
+	private int _moveAnimID = 0;
+	private int _dieAnimID = 0;
+	private int _shootAnimID = 0;
 
 	protected void Awake()
 	{
 		_mainCamera = Camera.main;
 		_characterController = GetComponent<CharacterController>();
+		_animator = GetComponent<Animator>();
+
+		_moveAnimID = Animator.StringToHash("isMoving");
+		_dieAnimID = Animator.StringToHash("Die");
+		_shootAnimID = Animator.StringToHash("Shoot");
 	}
 
 	protected void Update()
 	{
+		if(_isDead)
+		{
+			return;
+		}
+
 		switch (controllerConfig)
 		{
 			case ControllerConfig.Old:
@@ -62,6 +77,10 @@ public class PlayerCharacter : Entity
 		Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 		Vector3 motion = new Vector3(input.x, 0f, input.y) * speed * Time.deltaTime;
 
+		bool isMoving = (input.x != 0f || input.y != 0f);
+
+		_animator.SetBool(_moveAnimID, isMoving);
+
 		_characterController.Move(motion);
 	}
 
@@ -69,6 +88,7 @@ public class PlayerCharacter : Entity
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
+			_animator.SetTrigger(_shootAnimID);
 			ShootBullet();
 		}
 	}
@@ -106,7 +126,17 @@ public class PlayerCharacter : Entity
 	{
 		if (Input.GetMouseButtonDown(1))
 		{
+			_animator.SetTrigger(_shootAnimID);
 			ShootBullet();
+		}
+	}
+
+	public override void Die()
+	{
+		if(_isDead == false)
+		{
+			base.Die();
+			_animator.SetTrigger(_dieAnimID);
 		}
 	}
 }

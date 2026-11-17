@@ -21,7 +21,7 @@ public class EnemyCharacter : Entity
 
 		_navMeshAgent.updateRotation = false;
 		_navMeshAgent.angularSpeed = 0f;
- 
+
 		_raycastLayer = LayerMask.GetMask("Player", "Default");
 	}
 
@@ -43,6 +43,7 @@ public class EnemyCharacter : Entity
 	{
 		base.Die();
 		spawner.EnemyCountDecrease();
+		Destroy(gameObject);
 	}
 
 	private void UpdateHealthbar()
